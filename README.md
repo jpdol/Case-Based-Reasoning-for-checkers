@@ -1,1 +1,1 @@
-# Case Based Reasoning for chess
+# Case Based Reasoning for checkers
