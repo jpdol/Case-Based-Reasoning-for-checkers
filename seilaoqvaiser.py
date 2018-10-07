@@ -40,8 +40,9 @@ class board:
     
 
 class CBR:
-    def __init__(self, caseBase):
+    def __init__(self, caseBase, out):
         self.caseBase = caseBase
+        self.out = out
         self.valueRange = [['no', 'wp', 'wd']]
         self.globalSimList = []
     
@@ -107,7 +108,22 @@ class CBR:
                     weightSet = weightSet+weight
                     simPort = simPort + (simLocal*weight)
             self.globalSimList.append(simPort/weightSet)
-            
+    
+    def adapt(self,case): #case eh uma lista
+        highest = self.globalSimList[0]
+        index = 0
+        for i, globalSim in self.globalSimList:
+            if highest < globalSim:
+                highest = globalSim
+                index = i
+        outB = self.out.loc[index][0]
+        board = []
+        for space in case:
+            row = []
+            for i in range(8):
+                row.append(i)
+            board.append(row)
+        startPos = [ord(outB[0]) - 97, int(outB[1]) - 1]
         
     
 if __name__ == "__main__":
@@ -121,4 +137,3 @@ if __name__ == "__main__":
             print(row[i])
         print('----------')
         
-    
