@@ -21,6 +21,50 @@ def verifyDirs(nextMove):
     
     return hdir, vdir
 
+def seeNeighbors(i, j, boardstate, capturePos):
+    if (i-1 >= 0 and j-1 >= 0) or (i+1 < 8 and j+1 < 8) or (i-1>=0 and j+1<8) or (i+1<8 and j-1>=0):
+        if boardstate[i-1][j-1] == 'bp' or boardstate[i-1][j-1] == 'bd':
+            if  i-2 >= 0 and j-2 >=0:
+                if boardstate[i-2][j-2] == 'no' or boardstate[i-2][j-2] == 'no':
+                    capturePos.append([i-3, j-3])
+                    temp = boardstate[i][j]
+                    newBoardState = boardstate
+                    newBoardState[i][j] = 'no'
+                    newBoardState[i-3][j-3] = temp
+                    seeNeighbors(i-3, j-3, newBoardState, capturePos)
+                else:
+                    pass
+        if i+2 < 8 and j+2 < 8:
+            if boardstate[i+1][j+1] == 'bp' or boardstate[i+1][j+1] == 'bd':
+                if boardstate[i+2][j+2] == 'no' or boardstate[i+2][j+2] == 'no':
+                    capturePos.append([i+3, j+3])
+                    temp = boardstate[i][j]
+                    newBoardState = boardstate
+                    newBoardState[i][j] = 'no'
+                    newBoardState[i+3][j+3] = temp
+                    seeNeighbors(i+3, j+3, newBoardState, capturePos)
+                else:
+                    pass
+        if i-2 >= 0 and j+2 < 8:
+            if boardstate[i-1][j+1] == 'bp' or boardstate[i-1][j+1] == 'bd':
+                if boardstate[i-2][j+2] == 'no' or boardstate[i-2][j+2] == 'no':
+                    capturePos.append([i-3, j-3])
+                    temp = boardstate[i][j]
+                    newBoardState = boardstate
+                    newBoardState[i][j] = 'no'
+                    newBoardState[i-3][j-3] = temp
+                    seeNeighbors(i-3, j-3, newBoardState, capturePos)
+                else:
+                    pass
+
+def hasCapture(boardState):
+    capture = []
+    for i, row in enumerate(boardState):
+        for j, space in enumerate(row):
+            if space == 'wp':
+                seeNeighbors(i, j, boardState, capture)
+                        
+
 class piece:
     def __init__(self, kind):
         self.dist = 1
@@ -104,7 +148,7 @@ class CBR:
             simPort = 0
             for i in range(len(row)):
                 (simLocal,weight) = self.simLocal(case, row, i)
-                if(simLocal == None or weight == None):
+                if(simLocal != None or weight != None):
                     weightSet = weightSet+weight
                     simPort = simPort + (simLocal*weight)
             self.globalSimList.append(simPort/weightSet)
@@ -123,17 +167,15 @@ class CBR:
             for i in range(8):
                 row.append(i)
             board.append(row)
+        hasCapture()
         startPos = [ord(outB[0]) - 97, int(outB[1]) - 1]
         
     
 if __name__ == "__main__":
-    dataset = pd.read_csv(r"C:\Users\7\Desktop\smartchess\Case-Based-Reasoning-for-chess\checkersgame1.csv")
+    dataset = pd.read_csv(r"C:\Users\7\Desktop\smartchess\Case-Based-Reasoning-for-chess\CaseBase\caseBase.csv")
     #(h, v) = verifyDirs(dataset.loc[1,'next_move'])
     out = pd.DataFrame(dataset.loc[:,'next_move'])
     dataset = dataset.drop("next_move", axis = 1)
-    u = dataset.iterrows()
-    for index, row in dataset.iterrows():
-        for i in range(len(row)):
-            print(row[i])
-        print('----------')
-        
+    cbr = CBR(dataset, out)
+    cbr.simGlobal(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'wp',None,'no',None,'no',None,'no','no',None,'no',None,'bp',None,'no',None,None,'bp',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',0,0.75])
+    
