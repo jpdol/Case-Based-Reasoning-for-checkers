@@ -69,7 +69,7 @@ class CBR:
             ci = row[i]
             weight = 5
         else:
-            pass
+            return None, None
         
         if case[i] == 'no':
             cf = 0
@@ -93,14 +93,20 @@ class CBR:
             cf = row[i]
             weight = 5
         else:
-            pass
+            return None, None
         
         return np.max([0, 1 - np.abs(ci - cf)]), weight
     
     def simGlobal(self, case):
         for index, row in self.caseBase.iterrows():
+            weightSet = 0
+            simPort = 0
             for i in range(len(row)):
                 (simLocal,weight) = self.simLocal(case, row, i)
+                if(simLocal == None or weight == None):
+                    weightSet = weightSet+weight
+                    simPort = simPort + (simLocal*weight)
+            self.globalSimList.append(simPort/weightSet)
             
         
     
