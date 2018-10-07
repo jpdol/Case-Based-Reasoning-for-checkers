@@ -1,3 +1,5 @@
+def canMove(tabuleiro, color):
+	return True
 
 
 def winnerValidation(tabuleiro):
@@ -6,9 +8,14 @@ def winnerValidation(tabuleiro):
 		return 'white'
 	elif (('wp' not in tabuleiro) and ('wd' not in tabuleiro)):
 		return 'black'
-
+	elif (not canMove(tabuleiro, color='black')):
+		return 'white'
+	elif (not canMove(tabuleiro, color='white')):
+		return 'black'
+	elif ((not canMove(tabuleiro, color='black')) and (not canMove(tabuleiro, color='white'))):
+		return 'match tied'
 	else:
-		return 'not yet'
+		return 'no winner yet'
 
 
 
