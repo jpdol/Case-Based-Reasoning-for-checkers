@@ -44,7 +44,6 @@ def seeNeighbors(i, j, boardstate, capturePos):
                     newBoardState[i][j] = 'no'
                     newBoardState[i+2][j+2] = temp
                     newBoardState[i+1][j+1] = 'bt'
-                    print(i,j)
                     capturePos=capturePos+seeNeighbors(i+2, j+2, newBoardState, capturePos)
                 else:
                     pass
@@ -228,7 +227,7 @@ class CBR:
                     simPort = simPort + (simLocal*weight)
             self.globalSimList.append(simPort/weightSet)
     
-    def closestSim():
+    def closestSim(self):
       highest = self.globalSimList[0]
       index = 0
       for i, globalSim in enumerate(self.globalSimList):
@@ -253,16 +252,23 @@ class CBR:
       longestMove = checkForCapture[0]
       index = 0
       for i, out in enumerate(checkForCapture):
-        if len(out) > len(longestMove) and len(longestMove) > 2:
+        if len(out) > len(longestMove):
           longestMove = out
           index = i
+      
       if len(longestMove) < 2:
         longestMove = None
         index = None
       else:
-        for char in range(len(longesMove)):
-          
-          return chr(longestMove[1]+97) + 'x' + str(longestMove[0])
+        print(longestMove)
+        resultAdapt = ''
+        char = 0
+        while char <= len(longestMove)-1:
+          resultAdapt = resultAdapt + chr(longestMove[char+1]+97) + str(longestMove[char] + 1) + 'x'
+          char = char+2
+        return resultAdapt[:len(resultAdapt)-1]
+      
+      #verificar casos
       startPos = [ord(outB[0]) - 97, int(outB[1]) - 1]
         
     
@@ -274,7 +280,7 @@ if __name__ == "__main__":
     cbr = CBR(dataset, out)
     cbr.simGlobal(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'wp',None,'no',None,'no',None,'no','no',None,'no',None,'bp',None,'no',None,None,'bp',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',0,0.75])
     #cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'wp',None,'no',None,'no',None,'no','no',None,'no',None,'bp',None,'no',None,None,'bp',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',0,0.75])
-    #k = cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'bp',None,'no',None,'no',None,'no','bp',None,'no',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp'])
+    k = cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'bp',None,'no',None,'no',None,'no','bp',None,'no',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp'])
     cbr.simGlobal(['no',None,'wp',None,'wp',None,'wp',None,None,'no',None,'no',None,'no',None,'no','wp',None,'bp',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'no','no',None,'no',None,'no',None,'no',None,None,'no',None,'wd',None,'bp',None,'bp','no',None,'no',None,'no',None,'bp',None,None,'no',None,'no',None,'no',None,'bp',1,0.75])
     
     
