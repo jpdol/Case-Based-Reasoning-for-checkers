@@ -27,37 +27,46 @@ def canMove(tabuleiro, color):
 		if ((color=='b') and ((tabuleiro[i]=='bp') or (tabuleiro[i]=='bd'))):
 			if ((retornaLinha(i)-1==(retornaLinha(i-7))) and (retornaLinha(i-7)!= -1) and tabuleiro[i-7]=='no'):
 				movimento = True
-
+			elif ((tabuleiro[i]=='bd' and  retornaLinha(i)-1==(retornaLinha(i-7))) and (retornaLinha(i-7)!= -1) and tabuleiro[i-7]=='no'):
+				movimento = True
 			elif ((retornaLinha(i)-1==(retornaLinha(i-9))) and (retornaLinha(i-9)!= -1) and tabuleiro[i-9]=='no'):
 				movimento = True
-
+			elif ((tabuleiro[i]=='bd' and  retornaLinha(i)-1==(retornaLinha(i-9))) and (retornaLinha(i-9)!= -1) and tabuleiro[i-9]=='no'):
+				movimento = True
 			elif ((retornaLinha(i)-1==(retornaLinha(i-7))) and (retornaLinha(i-7)!= -1) and tabuleiro[i-7]!='no'):
 				aux = i-7
 				if ((tabuleiro[aux]=='wp' or tabuleiro[aux]=='wd') and (retornaLinha(aux)-1 == (retornaLinha(aux-7))) and (retornaLinha(aux-7)!= -1) and tabuleiro[aux-7]=='no'):
 					movimento = True
-
+				elif (((tabuleiro[i]=='bd') and (tabuleiro[aux]=='bp' or tabuleiro[aux]=='bd') and  retornaLinha(aux)-1==(retornaLinha(aux-7))) and (retornaLinha(aux-7)!= -1) and tabuleiro[aux-7]=='no'):
+					movimento = True
 			elif ((retornaLinha(i)-1==(retornaLinha(i-9))) and (retornaLinha(i-9)!= -1) and tabuleiro[i-9]!='no'):
 				aux = i-9
 				if ((tabuleiro[aux]=='wp' or tabuleiro[aux]=='wd') and (retornaLinha(aux)-1==(retornaLinha(aux-9))) and (retornaLinha(aux-9)!= -1) and tabuleiro[aux-9]=='no'):
 					movimento = True
-
+				elif (((tabuleiro[i]=='bd') and (tabuleiro[aux]=='bp' or tabuleiro[aux]=='bd') and  retornaLinha(aux)-1==(retornaLinha(aux-9))) and (retornaLinha(aux-9)!= -1) and tabuleiro[aux-9]=='no'):
+					movimento = True
 		elif ((color=='w') and ((tabuleiro[i]=='wp') or (tabuleiro[i]=='wd'))):
 			if ((retornaLinha(i)+1==(retornaLinha(i+7))) and (retornaLinha(i+7)!= -1) and tabuleiro[i+7]=='no'):
 				movimento = True
-			
+			elif ((tabuleiro[i]=='wd' and  retornaLinha(i)-1==(retornaLinha(i-7))) and (retornaLinha(i-7)!= -1) and tabuleiro[i-7]=='no'):
+				movimento = True
 			elif ((retornaLinha(i)+1==(retornaLinha(i+9))) and (retornaLinha(i+9)!= -1) and tabuleiro[i+9]=='no'):
 				movimento = True
-			
+			elif ((tabuleiro[i]=='wd' and  retornaLinha(i)-1==(retornaLinha(i-9))) and (retornaLinha(i-9)!= -1) and tabuleiro[i-9]=='no'):
+				movimento = True
 			elif ((retornaLinha(i)+1==(retornaLinha(i+7))) and (retornaLinha(i+7)!= -1) and tabuleiro[i+7]!='no'):
 				aux = i+7
 				if (((tabuleiro[aux]=='bp' or tabuleiro[aux]=='bd') and  retornaLinha(aux)+1==(retornaLinha(aux+7))) and (retornaLinha(aux+7)!= -1) and tabuleiro[aux+7]=='no'):
 					movimento = True
-			
+				elif (((tabuleiro[i]=='wd') and (tabuleiro[aux]=='bp' or tabuleiro[aux]=='bd') and  retornaLinha(aux)-1==(retornaLinha(aux-7))) and (retornaLinha(aux-7)!= -1) and tabuleiro[aux-7]=='no'):
+					movimento = True
 			elif ((retornaLinha(i)+1==(retornaLinha(i+9))) and (retornaLinha(i+9)!= -1) and tabuleiro[i+9]!='no'):
 				aux = i+9
 				if ((tabuleiro[aux]=='bp' or tabuleiro[aux]=='bd') and (retornaLinha(aux)+1==(retornaLinha(aux+9))) and (retornaLinha(aux+9)!= -1) and tabuleiro[aux+9]=='no'):
 					movimento = True
-		
+				elif (((tabuleiro[i]=='wd') and (tabuleiro[aux]=='bp' or tabuleiro[aux]=='bd') and  retornaLinha(aux)-1==(retornaLinha(aux-9))) and (retornaLinha(aux-9)!= -1) and tabuleiro[aux-9]=='no'):
+					movimento = True
+
 		i+=1
 	
 	return movimento
@@ -66,7 +75,7 @@ def canMove(tabuleiro, color):
 #Retorna a cor do das peças do vencedor, caso haja.
 #Retorna mensagem de empate, caso haja
 #Caso contrário, o jogo continua
-def winnerValidation(tabuleiro, next_to_move):
+def winnerVerification(tabuleiro, next_to_move):
 	if (('bp' not in tabuleiro) and ('bd' not in tabuleiro)):
 		return 'white'
 	elif (('wp' not in tabuleiro) and ('wd' not in tabuleiro)):
@@ -79,4 +88,14 @@ def winnerValidation(tabuleiro, next_to_move):
 		return 'black'
 	else:
 		return 'no winner yet'
+
+
+
+x = ['no',None,'wp',None,'wp',None,'wp',None,None,'no',None,'no',None,'no',None,'no','wp',None,'bp',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'no','no',None,'no',None,'no',None,'no',None,None,'no',None,'wd',None,'bp',None,'bp','no',None,'no',None,'no',None,'bp',None,None,'no',None,'no',None,'no',None,'bp']
+
+
+print(winnerVerification(x,'b'))
+
+
+
 
