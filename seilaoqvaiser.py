@@ -22,48 +22,123 @@ def verifyDirs(nextMove):
     return hdir, vdir
 
 def seeNeighbors(i, j, boardstate, capturePos):
+    #print(boardstate)
+    capturePos = [i,j]
     if (i-1 >= 0 and j-1 >= 0) or (i+1 < 8 and j+1 < 8) or (i-1>=0 and j+1<8) or (i+1<8 and j-1>=0):
         if boardstate[i-1][j-1] == 'bp' or boardstate[i-1][j-1] == 'bd':
             if  i-2 >= 0 and j-2 >=0:
                 if boardstate[i-2][j-2] == 'no' or boardstate[i-2][j-2] == 'no':
-                    capturePos.append([i-3, j-3])
                     temp = boardstate[i][j]
                     newBoardState = boardstate
                     newBoardState[i][j] = 'no'
-                    newBoardState[i-3][j-3] = temp
-                    seeNeighbors(i-3, j-3, newBoardState, capturePos)
+                    newBoardState[i-2][j-2] = temp
+                    newBoardState[i-1][j-1] = 'bt'
+                    capturePos=capturePos+seeNeighbors(i-2, j-2, newBoardState, capturePos)
                 else:
                     pass
         if i+2 < 8 and j+2 < 8:
             if boardstate[i+1][j+1] == 'bp' or boardstate[i+1][j+1] == 'bd':
                 if boardstate[i+2][j+2] == 'no' or boardstate[i+2][j+2] == 'no':
-                    capturePos.append([i+3, j+3])
                     temp = boardstate[i][j]
                     newBoardState = boardstate
                     newBoardState[i][j] = 'no'
-                    newBoardState[i+3][j+3] = temp
-                    seeNeighbors(i+3, j+3, newBoardState, capturePos)
+                    newBoardState[i+2][j+2] = temp
+                    newBoardState[i+1][j+1] = 'bt'
+                    print(i,j)
+                    capturePos=capturePos+seeNeighbors(i+2, j+2, newBoardState, capturePos)
                 else:
                     pass
         if i-2 >= 0 and j+2 < 8:
             if boardstate[i-1][j+1] == 'bp' or boardstate[i-1][j+1] == 'bd':
                 if boardstate[i-2][j+2] == 'no' or boardstate[i-2][j+2] == 'no':
-                    capturePos.append([i-3, j-3])
                     temp = boardstate[i][j]
                     newBoardState = boardstate
                     newBoardState[i][j] = 'no'
-                    newBoardState[i-3][j-3] = temp
-                    seeNeighbors(i-3, j-3, newBoardState, capturePos)
+                    newBoardState[i-2][j+2] = temp
+                    newBoardState[i-1][j+1] = 'bt'
+                    capturePos=capturePos+seeNeighbors(i-2, j+2, newBoardState, capturePos)
                 else:
                     pass
+        if i+2 < 8 and j-2 >= 0:
+            if boardstate[i+1][j-1] == 'bp' or boardstate[i+1][j-1] == 'bd':
+                if boardstate[i+2][j-2] == 'no' or boardstate[i+2][j-2] == 'no':
+                    temp = boardstate[i][j]
+                    newBoardState = boardstate
+                    newBoardState[i][j] = 'no'
+                    newBoardState[i+2][j-2] = temp
+                    newBoardState[i+1][j-1] = 'bt'
+                    capturePos=capturePos+seeNeighbors(i+2, j-2, newBoardState, capturePos)
+                else:
+                    pass
+        
+        return capturePos
+
+def seeNeighborsDama(i, j, boardState, capturePos):
+    right = 6-j
+    left = j+1
+    up = i+1
+    down = 6-i
+    capturePos = [i,j]
+    #checking up right
+    for index in range(np.min([up,right])):
+        if boardState[i-1-index][j+1+index] == 'bp' or boardState[i-1-index][j+1+index] == 'bd':
+            if boardState[i-index-2][j+index+2] == 'no' or boardState[i-index-2][j+index+2] == 'no':
+                    temp = boardState[i][j]
+                    newBoardState = boardState
+                    newBoardState[i][j] = 'no'
+                    newBoardState[i-index-2][j+index+2] = temp
+                    newBoardState[i-index-1][j+index+1] = 'bt'
+                    capturePos=capturePos+seeNeighborsDama(i-index-2, j+index+2, newBoardState, capturePos)
+            else:
+                pass
+    #check up left
+    for index in range(np.min([up, left])):
+        if boardState[i-1-index][j-1-index] == 'bp' or boardState[i-1-index][j-1-index] == 'bd':
+            if boardState[i-index-2][j-index-2] == 'no' or boardState[i-index-2][j-index-2] == 'no':
+                    temp = boardState[i][j]
+                    newBoardState = boardState
+                    newBoardState[i][j] = 'no'
+                    newBoardState[i-index-2][j-index-2] = temp
+                    newBoardState[i-index-1][j-index-1] = 'bt'
+                    capturePos=capturePos+seeNeighborsDama(i-index-2, j-index-2, newBoardState, capturePos)
+            else:
+                pass
+    #check down left
+    for index in range(np.min([down, left])):
+        if boardState[i+1+index][j-1-index] == 'bp' or boardState[i+1+index][j-1-index] == 'bd':
+            if boardState[i+index+2][j-index-2] == 'no' or boardState[i+index+2][j-index-2] == 'no':
+                    temp = boardState[i][j]
+                    newBoardState = boardState
+                    newBoardState[i][j] = 'no'
+                    newBoardState[i+index+2][j-index-2] = temp
+                    newBoardState[i+index+1][j-index-1] = 'bt'
+                    capturePos=capturePos+seeNeighborsDama(i+index+2, j-index-2, newBoardState, capturePos)
+            else:
+                pass
+    #check down right
+    for index in range(np.min([down, right])):
+        if boardState[i+1+index][j+1+index] == 'bp' or boardState[i+1+index][j+1+index] == 'bd':
+            if boardState[i+index+2][j+index+2] == 'no' or boardState[i+index+2][j+index+2] == 'no':
+                    temp = boardState[i][j]
+                    newBoardState = boardState
+                    newBoardState[i][j] = 'no'
+                    newBoardState[i+index+2][j+index+2] = temp
+                    capturePos=capturePos+seeNeighborsDama(i+index+2, j+index+2, newBoardState, capturePos)
+            else:
+                pass
+    return capturePos
 
 def hasCapture(boardState):
     capture = []
     for i, row in enumerate(boardState):
         for j, space in enumerate(row):
             if space == 'wp':
-                seeNeighbors(i, j, boardState, capture)
-                        
+                capture.append(seeNeighbors(i, j, boardState, capture))
+            elif space == 'wd':
+                capture.append(seeNeighborsDama(i, j, boardState, capture))
+            else:
+                pass
+    return capture
 
 class piece:
     def __init__(self, kind):
@@ -156,18 +231,19 @@ class CBR:
     def adapt(self,case): #case eh uma lista
         highest = self.globalSimList[0]
         index = 0
-        for i, globalSim in self.globalSimList:
+        for i, globalSim in enumerate(self.globalSimList):
             if highest < globalSim:
                 highest = globalSim
                 index = i
         outB = self.out.loc[index][0]
         board = []
-        for space in case:
-            row = []
-            for i in range(8):
-                row.append(i)
-            board.append(row)
-        hasCapture()
+        for row in range(8):
+            lin = []
+            for column in range(8):
+                lin.append(case[column+(8*row)])
+            board.append(lin)
+        return hasCapture(board)
+        
         startPos = [ord(outB[0]) - 97, int(outB[1]) - 1]
         
     
@@ -178,4 +254,9 @@ if __name__ == "__main__":
     dataset = dataset.drop("next_move", axis = 1)
     cbr = CBR(dataset, out)
     cbr.simGlobal(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'wp',None,'no',None,'no',None,'no','no',None,'no',None,'bp',None,'no',None,None,'bp',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',0,0.75])
+    #cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'wp',None,'no',None,'no',None,'no','no',None,'no',None,'bp',None,'no',None,None,'bp',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',0,0.75])
+    #k = cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'bp',None,'no',None,'no',None,'no','bp',None,'no',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp'])
+    cbr.simGlobal(['no',None,'wp',None,'wp',None,'wp',None,None,'no',None,'no',None,'no',None,'no','wp',None,'bp',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'no','no',None,'no',None,'no',None,'no',None,None,'no',None,'wd',None,'bp',None,'bp','no',None,'no',None,'no',None,'bp',None,None,'no',None,'no',None,'no',None,'bp',1,0.75])
+    
+    
     
