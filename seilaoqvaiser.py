@@ -228,27 +228,46 @@ class CBR:
                     simPort = simPort + (simLocal*weight)
             self.globalSimList.append(simPort/weightSet)
     
+    def closestSim():
+      highest = self.globalSimList[0]
+      index = 0
+      for i, globalSim in enumerate(self.globalSimList):
+        if highest < globalSim:
+          highest = globalSim
+          index = i
+      
+      return highest, index
     def adapt(self,case): #case eh uma lista
-        highest = self.globalSimList[0]
-        index = 0
-        for i, globalSim in enumerate(self.globalSimList):
-            if highest < globalSim:
-                highest = globalSim
-                index = i
-        outB = self.out.loc[index][0]
-        board = []
-        for row in range(8):
-            lin = []
-            for column in range(8):
-                lin.append(case[column+(8*row)])
-            board.append(lin)
-        return hasCapture(board)
-        
-        startPos = [ord(outB[0]) - 97, int(outB[1]) - 1]
+      highest, index = self.closestSim()
+      outB = self.out.loc[index][0]
+      
+      board = []
+      for row in range(8):
+          lin = []
+          for column in range(8):
+              lin.append(case[column+(8*row)])
+          board.append(lin)
+      
+      checkForCapture = hasCapture(board)
+      
+      longestMove = checkForCapture[0]
+      index = 0
+      for i, out in enumerate(checkForCapture):
+        if len(out) > len(longestMove) and len(longestMove) > 2:
+          longestMove = out
+          index = i
+      if len(longestMove) < 2:
+        longestMove = None
+        index = None
+      else:
+        for char in range(len(longesMove)):
+          
+          return chr(longestMove[1]+97) + 'x' + str(longestMove[0])
+      startPos = [ord(outB[0]) - 97, int(outB[1]) - 1]
         
     
 if __name__ == "__main__":
-    dataset = pd.read_csv(r"C:\Users\7\Desktop\smartchess\Case-Based-Reasoning-for-chess\CaseBase\caseBase.csv")
+    dataset = pd.read_csv(r"C:\Users\luido\OneDrive\Documentos\GitHub\Case-Based-Reasoning-for-checkers\CaseBase\caseBase.csv")
     #(h, v) = verifyDirs(dataset.loc[1,'next_move'])
     out = pd.DataFrame(dataset.loc[:,'next_move'])
     dataset = dataset.drop("next_move", axis = 1)
