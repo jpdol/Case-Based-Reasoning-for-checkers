@@ -267,7 +267,7 @@ class CBR:
         
     
 if __name__ == "__main__":
-    dataset = pd.read_csv(r"C:\Users\luido\OneDrive\Documentos\GitHub\Case-Based-Reasoning-for-checkers\CaseBase\caseBase.csv")
+    dataset = pd.read_csv(r"CaseBase/caseBase.csv")
     #(h, v) = verifyDirs(dataset.loc[1,'next_move'])
     out = pd.DataFrame(dataset.loc[:,'next_move'])
     dataset = dataset.drop("next_move", axis = 1)
