@@ -71,12 +71,12 @@ def winnerValidation(tabuleiro, next_to_move):
 		return 'white'
 	elif (('wp' not in tabuleiro) and ('wd' not in tabuleiro)):
 		return 'black'
+	elif ((not canMove(tabuleiro, color='b')) and (not canMove(tabuleiro, color='w'))):
+		return 'match tied'
 	elif (not canMove(tabuleiro, color='b') and (next_move=='b')):
 		return 'white'
 	elif (not canMove(tabuleiro, color='w') and (next_move=='w')):
 		return 'black'
-	elif ((not canMove(tabuleiro, color='b')) and (not canMove(tabuleiro, color='w'))):
-		return 'match tied'
 	else:
 		return 'no winner yet'
 
