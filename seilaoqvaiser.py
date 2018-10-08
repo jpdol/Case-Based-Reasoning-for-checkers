@@ -128,16 +128,17 @@ def seeNeighborsDama(i, j, boardState, capturePos):
     return capturePos
 
 def hasCapture(boardState):
-    capture = []
+    captureP = []
+    captureD = []
     for i, row in enumerate(boardState):
         for j, space in enumerate(row):
             if space == 'wp':
-                capture.append(seeNeighbors(i, j, boardState, capture))
+                captureP.append(seeNeighbors(i, j, boardState, capture))
             elif space == 'wd':
-                capture.append(seeNeighborsDama(i, j, boardState, capture))
+                captureD.append(seeNeighborsDama(i, j, boardState, capture))
             else:
                 pass
-    return capture
+    return captureP, CaptureD
 
 class piece:
     def __init__(self, kind):
@@ -247,11 +248,15 @@ class CBR:
               lin.append(case[column+(8*row)])
           board.append(lin)
       
-      checkForCapture = hasCapture(board)
+      checkForCaptureP, checkForCaptureD = hasCapture(board)
       
-      longestMove = checkForCapture[0]
+      longestMove = checkForCaptureP[0]
       index = 0
-      for i, out in enumerate(checkForCapture):
+      for i, out in enumerate(checkForCaptureP):
+        if len(out) > len(longestMove):
+          longestMove = out
+          index = i
+      for i, out in enumerate(checkForCaptureD):
         if len(out) > len(longestMove):
           longestMove = out
           index = i
