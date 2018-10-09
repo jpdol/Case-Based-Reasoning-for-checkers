@@ -1,5 +1,4 @@
-from winnerVerification import *
-from seilaoqvaiser import *
+from Checkers_CBR import *
 
 def gameFinish(result,boards_list):
   if result == 'white':
