@@ -347,22 +347,4 @@ class CBR:
       if nextSpace is not None:
         return nextSpace
       else:
-        return lookForPiece(board, startPos, hDir, vDir, typeOfPiece)
-        
-        
-        
-if __name__ == "__main__":
-    dataset = pd.read_csv(r"C:\Users\luido\OneDrive\Documentos\GitHub\Case-Based-Reasoning-for-checkers\CaseBase\caseBase.csv")
-    #(h, v) = verifyDirs(dataset.loc[1,'next_move'])
-    out = pd.DataFrame(dataset.loc[:,'next_move'])
-    dataset = dataset.drop("next_move", axis = 1)
-    cbr = CBR(dataset, out)
-    #m = cbr.receiveAndAdapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'wp',None,'no',None,'no',None,'no','no',None,'no',None,'bp',None,'no',None,None,'bp',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',0,0.75])
-    #cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'wp',None,'no',None,'no',None,'no','no',None,'no',None,'bp',None,'no',None,None,'bp',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',0,0.75])
-    #k = cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'bp',None,'no',None,'no',None,'no','bp',None,'no',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',1,0.75])
-    #l = cbr.adapt(['no',None,'wp',None,'wp',None,'wp',None,None,'no',None,'no',None,'no',None,'no','wp',None,'bp',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'no','no',None,'no',None,'no',None,'no',None,None,'no',None,'wd',None,'bp',None,'bp','no',None,'no',None,'no',None,'bp',None,None,'no',None,'no',None,'no',None,'bp',1,0.75])
-    n = cbr.receiveAndAdapt(['no',None,'wp',None,'wp',None,'no',None,None,'wp',None,'wp',None,'no',None,'wp','no',None,'wp',None,'no',None,'wp',None,None,'bp',None,'no',None,'wp',None,'wp','bp',None,'no',None,'bp',None,'no',None,None,'no',None,'bp',None,'bp',None,'bp','bp',None,'no',None,'no',None,'no',None,None,'no',None,'bp',None,'no',None,'bp',0])
-    cbr.avaliation([['no',None,'wp',None,'wp',None,'no',None,None,'wp',None,'wp',None,'no',None,'wp','no',None,'wp',None,'no',None,'wp',None,None,'bp',None,'no',None,'wp',None,'wp','bp',None,'no',None,'bp',None,'no',None,None,'no',None,'bp',None,'bp',None,'bp','bp',None,'no',None,'no',None,'no',None,None,'no',None,'bp',None,'no',None,'bp',0]], 'win')
-    # n = cbr.adapt(current_board)
-    # n = cbr.adapt(['no',None,'wp',None,'wp',None,'no',None,None,'wp',None,'wp',None,'no',None,'wp','no',None,'wp',None,'no',None,'wp',None,None,'bp',None,'no',None,'wp',None,'wp','bp',None,'no',None,'bp',None,'no',None,None,'no',None,'bp',None,'bp',None,'bp','bp',None,'no',None,'no',None,'no',None,None,'no',None,'bp',None,'no',None,'bp',0,0.75])
-    # print(n)    
+        return lookForPiece(board, startPos, hDir, vDir, typeOfPiece)   
