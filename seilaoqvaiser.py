@@ -23,7 +23,6 @@ def verifyDir(nextMove):
   return hdir, vdir
 
 def seeNeighbors(i, j, boardstate, capturePos):
-  #print(boardstate)
   capturePos = [i,j]
   if (i-1 >= 0 and j-1 >= 0) or (i+1 < 8 and j+1 < 8) or (i-1>=0 and j+1<8) or (i+1<8 and j-1>=0):
       if boardstate[i-1][j-1] == 'bp' or boardstate[i-1][j-1] == 'bd':
@@ -154,47 +153,53 @@ def hasCapture(boardState):
   return captureP, captureD
 
 def verifyMovement(startPos, endPos, hDir, vDir, board, typeOfPiece):
-  #print(board)
   if board[startPos[0]][startPos[1]] == typeOfPiece and board[endPos[0]][endPos[1]] == 'no':
     return endPos
   elif board[startPos[0]][startPos[1]] == typeOfPiece and board[vDir*endPos[0]][hDir*endPos[1]] == 'no':
+    print([vDir*endPos[0], hDir*endPos[1]])
     return [vDir*endPos[0], hDir*endPos[1]]
   elif board[startPos[0]][startPos[1]] == typeOfPiece and board[vDir*endPos[0]][-hDir*endPos[1]] == 'no':
+    print([vDir*endPos[0], -hDir*endPos[1]])
     return [vDir*endPos[0], -hDir*endPos[1]]
   else:
+    print(3)
     return None
 
 def lookForPiece(board, startPos, hDir, vDir, typeOfPiece):
   i = 0
   j = 0
   board[startPos[0]][startPos[1]] = 'done'
-  #print(board)
-  while(i < 7):
+  print(board)
+  while(i < 8):
     randDirline = rd.choice([-1,1])
+    j = 0
     while(j < 7):
       randDircol = rd.choice([-1,1])
       if startPos[0] + randDirline* i < 8 and startPos[0] + randDirline* i >= 0:
         if startPos[1] + randDircol*j < 8 and startPos[1] + randDircol*j >= 0:
           if board[startPos[0] + randDirline* i][startPos[1] + randDircol*j] == typeOfPiece:
-            check = verifyMovement(startPos, [startPos[0] + randDirline* i, startPos[1] + randDircol*j] ,randDircol, randDirline, board, typeOfPiece)
+            check = verifyMovement([startPos[0] + randDirline* i, startPos[1] + randDircol*j] , [startPos[0] + randDirline* i+1, startPos[1] + randDircol*j+1] ,randDircol, 1, board, typeOfPiece)
             if check is not None:
-              return check
+              return [[startPos[0] + randDirline* i, startPos[1] + randDircol*j], check]
+            
         if startPos[1] - randDircol*j < 8 and startPos[1] - randDircol*j >= 0:
           if board[startPos[0] + randDirline* i][startPos[1] - randDircol*j] == typeOfPiece:
-            check = verifyMovement(startPos, [startPos[0] + randDirline* i, startPos[1] - randDircol*j] ,randDircol, randDirline, board, typeOfPiece)
+            check = verifyMovement([startPos[0] + randDirline* i, startPos[1] - randDircol*j], [startPos[0] + randDirline* i + 1, startPos[1] - randDircol*j+1] ,-randDircol, 1, board, typeOfPiece)
             if check is not None:
-              return check
+              return [[startPos[0] + randDirline* i, startPos[1] - randDircol*j], check]
+            
       if startPos[0] - randDirline* i < 8 and startPos[0] - randDirline* i >= 0:
         if startPos[1] + randDircol*j < 8 and startPos[1] + randDircol*j >= 0:
           if board[startPos[0] - randDirline* i][startPos[1] + randDircol*j] == typeOfPiece:
-            check = verifyMovement(startPos, [startPos[0] - randDirline* i, startPos[1] + randDircol*j] ,randDircol, randDirline, board, typeOfPiece)
+            check = verifyMovement([startPos[0] - randDirline* i, startPos[1] + randDircol*j], [startPos[0] - randDirline* i + 1, startPos[1] + randDircol*j + 1] ,randDircol, 1, board, typeOfPiece)
             if check is not None:
-              return check
+              return [[startPos[0] - randDirline* i, startPos[1] + randDircol*j], check]
+            
         if startPos[1] - randDircol*j < 8 and startPos[1] - randDircol*j >= 0:
           if board[startPos[0] - randDirline* i][startPos[1] - randDircol*j] == typeOfPiece:
-            check = verifyMovement(startPos, [startPos[0] - randDirline* i, startPos[1] - randDircol*j] ,randDircol, randDirline, board, typeOfPiece)
+            check = verifyMovement([startPos[0] - randDirline* i, startPos[1] - randDircol*j], [startPos[0] - randDirline* i + 1, startPos[1] - randDircol*j + 1] ,-randDircol, 1, board, typeOfPiece)
             if check is not None:
-              return check
+              return [[startPos[0] - randDirline* i, startPos[1] - randDircol*j], check]
       j = j+1
     i = i+1
   return None
@@ -223,6 +228,7 @@ class CBR:
         self.out = out
         self.valueRange = [['no', 'wp', 'wd']]
         self.globalSimList = []
+        self.casesUsedList = []
     
     def simLocal(self, case, row, i):
                 
@@ -296,8 +302,18 @@ class CBR:
           index = i
       
       return highest, index
-    def adapt(self,case): #case eh uma lista
+    
+    def avaliation(self,newCasesList, result):
+      if result== 'win':
+        att = 1.1
+        
+      elif result == 'lose':
+        att = 0.9
+      else:
+        att = 1
       
+    
+    def receiveAndAdapt(self,case): #case eh uma lista
       board = []
       for row in range(8):
           lin = []
@@ -322,9 +338,7 @@ class CBR:
           if len(out) > len(longestMove):
             longestMove = out
             index = i
-      
-      
-      #print(longestMove)
+            
       if longestMove is not None:
         resultAdapt = ''
         char = 0
@@ -336,21 +350,16 @@ class CBR:
       #verificar casos
       self.simGlobal(case)
       highest, index = self.closestSim()
-      print(self.caseBase.loc[index])
+      self.casesUsedList.append(index)
       outB = self.out.loc[index][0]
-      print(outB)
       startPos = [ord(outB[0]) - 97, int(outB[1]) - 1]
-      print(board)
-      print(startPos)
       endPos = [ord(outB[3]) - 97, int(outB[4]) - 1]
       typeOfPiece = self.caseBase.loc[index][outB[0]+outB[1]]
       hDir, vDir = verifyDir(outB)
       nextSpace = verifyMovement(startPos, endPos, hDir, vDir, board, typeOfPiece)
       if nextSpace is not None:
-        print(1)
         return nextSpace
       else:
-        print(2)
         return lookForPiece(board, startPos, hDir, vDir, typeOfPiece)
         
         
@@ -365,6 +374,6 @@ if __name__ == "__main__":
     #cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'wp',None,'no',None,'no',None,'no','no',None,'no',None,'bp',None,'no',None,None,'bp',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',0,0.75])
     #k = cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'bp',None,'no',None,'no',None,'no','bp',None,'no',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',1,0.75])
     #l = cbr.adapt(['no',None,'wp',None,'wp',None,'wp',None,None,'no',None,'no',None,'no',None,'no','wp',None,'bp',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'no','no',None,'no',None,'no',None,'no',None,None,'no',None,'wd',None,'bp',None,'bp','no',None,'no',None,'no',None,'bp',None,None,'no',None,'no',None,'no',None,'bp',1,0.75])
-    n = cbr.adapt(['no',None,'wp',None,'wp',None,'no',None,None,'wp',None,'wp',None,'no',None,'wp','no',None,'wp',None,'no',None,'wp',None,None,'bp',None,'no',None,'wp',None,'wp','bp',None,'no',None,'bp',None,'no',None,None,'no',None,'bp',None,'bp',None,'bp','bp',None,'no',None,'no',None,'no',None,None,'no',None,'bp',None,'no',None,'bp',0,0.75])
+    n = cbr.receiveAndAdapt(['no',None,'wp',None,'wp',None,'no',None,None,'wp',None,'wp',None,'no',None,'wp','no',None,'wp',None,'no',None,'wp',None,None,'bp',None,'no',None,'wp',None,'wp','bp',None,'no',None,'bp',None,'no',None,None,'no',None,'bp',None,'bp',None,'bp','bp',None,'no',None,'no',None,'no',None,None,'no',None,'bp',None,'no',None,'bp',0,0.75])
     
     
