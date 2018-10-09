@@ -199,24 +199,6 @@ def lookForPiece(board, startPos, hDir, vDir, typeOfPiece):
     i = i+1
   return None
 
-class piece:
-    def __init__(self, kind):
-        self.dist = 1
-        self.dama = 0
-        self.kind = kind
-
-class board:
-    def __init__(self):
-        checkers = [[piece('wp'), None,piece('wp'), None,piece('wp'), None,piece('wp'), None],
-                     [None, piece('wp'), None, piece('wp'), None, piece('wp'), None, piece('wp')],
-                     [piece('wp'), None,piece('wp'), None,piece('wp'), None,piece('wp'), None],
-                     [None, 'no', None, 'no', None, 'no', None, 'no'],
-                     ['no', None, 'no', None, 'no', None, 'no', None],
-                     [None, piece('bp'), None, piece('bp'), None, piece('bp'), None, piece('bp')],
-                     [piece('bp'), None,piece('bp'), None,piece('bp'), None,piece('bp'), None],
-                     [None, piece('bp'), None, piece('bp'), None, piece('bp'), None, piece('bp')]]
-    
-
 class CBR:
     def __init__(self, caseBase, out):
         self.caseBase = caseBase
@@ -281,7 +263,7 @@ class CBR:
         for index, row in self.caseBase.iterrows():
             weightSet = 0
             simPort = 0
-            for i in range(len(row)):
+            for i in range(len(row)- 1):
                 (simLocal,weight) = self.simLocal(case, row, i)
                 if(simLocal != None or weight != None):
                     weightSet = weightSet+weight
@@ -379,7 +361,7 @@ if __name__ == "__main__":
     #cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'wp',None,'no',None,'no',None,'no','no',None,'no',None,'bp',None,'no',None,None,'bp',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',0,0.75])
     #k = cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'bp',None,'no',None,'no',None,'no','bp',None,'no',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',1,0.75])
     #l = cbr.adapt(['no',None,'wp',None,'wp',None,'wp',None,None,'no',None,'no',None,'no',None,'no','wp',None,'bp',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'no','no',None,'no',None,'no',None,'no',None,None,'no',None,'wd',None,'bp',None,'bp','no',None,'no',None,'no',None,'bp',None,None,'no',None,'no',None,'no',None,'bp',1,0.75])
-    n = cbr.receiveAndAdapt(['no',None,'wp',None,'wp',None,'no',None,None,'wp',None,'wp',None,'no',None,'wp','no',None,'wp',None,'no',None,'wp',None,None,'bp',None,'no',None,'wp',None,'wp','bp',None,'no',None,'bp',None,'no',None,None,'no',None,'bp',None,'bp',None,'bp','bp',None,'no',None,'no',None,'no',None,None,'no',None,'bp',None,'no',None,'bp',0,0.75])
+    n = cbr.receiveAndAdapt(['no',None,'wp',None,'wp',None,'no',None,None,'wp',None,'wp',None,'no',None,'wp','no',None,'wp',None,'no',None,'wp',None,None,'bp',None,'no',None,'wp',None,'wp','bp',None,'no',None,'bp',None,'no',None,None,'no',None,'bp',None,'bp',None,'bp','bp',None,'no',None,'no',None,'no',None,None,'no',None,'bp',None,'no',None,'bp',0])
     cbr.avaliation([['no',None,'wp',None,'wp',None,'no',None,None,'wp',None,'wp',None,'no',None,'wp','no',None,'wp',None,'no',None,'wp',None,None,'bp',None,'no',None,'wp',None,'wp','bp',None,'no',None,'bp',None,'no',None,None,'no',None,'bp',None,'bp',None,'bp','bp',None,'no',None,'no',None,'no',None,None,'no',None,'bp',None,'no',None,'bp',0]], 'win')
     # n = cbr.adapt(current_board)
     # n = cbr.adapt(['no',None,'wp',None,'wp',None,'no',None,None,'wp',None,'wp',None,'no',None,'wp','no',None,'wp',None,'no',None,'wp',None,None,'bp',None,'no',None,'wp',None,'wp','bp',None,'no',None,'bp',None,'no',None,None,'no',None,'bp',None,'bp',None,'bp','bp',None,'no',None,'no',None,'no',None,None,'no',None,'bp',None,'no',None,'bp',0,0.75])
