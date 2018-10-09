@@ -368,6 +368,7 @@ class CBR:
       hDir, vDir = verifyDir(outB)
       nextSpace = verifyMovement(startPos, endPos, hDir, vDir, board, typeOfPiece)
       if nextSpace is not None:
+<<<<<<< HEAD
         return nextSpace
       else:
 =======
