@@ -8,6 +8,7 @@ Created on Sat Oct  6 16:11:56 2018
 import pandas as pd
 import numpy as np
 import random as rd
+from winnerVerification import *
 
 def verifyDir(nextMove):
   if nextMove[0] < nextMove[3]: #ie "a1-b2" a<b
@@ -327,13 +328,13 @@ class CBR:
       index = 0
       if checkForCaptureP is not None:
         longestMove = checkForCaptureP[0]
-        print(checkForCaptureP)
+        # print(checkForCaptureP)
         for i, out in enumerate(checkForCaptureP):
           if len(out) > len(longestMove):
             longestMove = out
             index = i
       if checkForCaptureD is not None:
-        longestMove = checkForCaptureP[0]
+        longestMove = checkForCaptureD[0]
         for i, out in enumerate(checkForCaptureD):
           if len(out) > len(longestMove):
             longestMove = out
@@ -350,9 +351,18 @@ class CBR:
       #verificar casos
       self.simGlobal(case)
       highest, index = self.closestSim()
+<<<<<<< HEAD
       self.casesUsedList.append(index)
       outB = self.out.loc[index][0]
       startPos = [ord(outB[0]) - 97, int(outB[1]) - 1]
+=======
+      # print(self.caseBase.loc[index])
+      outB = self.out.loc[index][0]
+      # print(outB)
+      startPos = [ord(outB[0]) - 97, int(outB[1]) - 1]
+      # print(board)
+      # print(startPos)
+>>>>>>> 4f15ec470a1db7f0712e305aea0d3277ac89142b
       endPos = [ord(outB[3]) - 97, int(outB[4]) - 1]
       typeOfPiece = self.caseBase.loc[index][outB[0]+outB[1]]
       hDir, vDir = verifyDir(outB)
@@ -360,6 +370,12 @@ class CBR:
       if nextSpace is not None:
         return nextSpace
       else:
+=======
+        # print(1)
+        return nextSpace
+      else:
+        # print(2)
+>>>>>>> 4f15ec470a1db7f0712e305aea0d3277ac89142b
         return lookForPiece(board, startPos, hDir, vDir, typeOfPiece)
         
         
@@ -370,10 +386,59 @@ if __name__ == "__main__":
     out = pd.DataFrame(dataset.loc[:,'next_move'])
     dataset = dataset.drop("next_move", axis = 1)
     cbr = CBR(dataset, out)
+
+    flag = True
     #m = cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'wp',None,'no',None,'no',None,'no','no',None,'no',None,'bp',None,'no',None,None,'bp',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',0,0.75])
     #cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'wp',None,'no',None,'no',None,'no','no',None,'no',None,'bp',None,'no',None,None,'bp',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',0,0.75])
     #k = cbr.adapt(['wp',None,'wp',None,'wp',None,'wp',None,None,'wp',None,'wp',None,'wp',None,'wp','wp',None,'no',None,'wp',None,'wp',None,None,'bp',None,'no',None,'no',None,'no','bp',None,'no',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'bp','bp',None,'bp',None,'bp',None,'bp',None,None,'bp',None,'bp',None,'bp',None,'bp',1,0.75])
     #l = cbr.adapt(['no',None,'wp',None,'wp',None,'wp',None,None,'no',None,'no',None,'no',None,'no','wp',None,'bp',None,'no',None,'no',None,None,'no',None,'no',None,'bp',None,'no','no',None,'no',None,'no',None,'no',None,None,'no',None,'wd',None,'bp',None,'bp','no',None,'no',None,'no',None,'bp',None,None,'no',None,'no',None,'no',None,'bp',1,0.75])
+<<<<<<< HEAD
     n = cbr.receiveAndAdapt(['no',None,'wp',None,'wp',None,'no',None,None,'wp',None,'wp',None,'no',None,'wp','no',None,'wp',None,'no',None,'wp',None,None,'bp',None,'no',None,'wp',None,'wp','bp',None,'no',None,'bp',None,'no',None,None,'no',None,'bp',None,'bp',None,'bp','bp',None,'no',None,'no',None,'no',None,None,'no',None,'bp',None,'no',None,'bp',0,0.75])
+=======
+    boards_list = []
+    while(flag):
+      print("Por favor entre com o estado atual do tabuleiro: ")
+      current_board = str(input())
+      current_board = current_board.replace("'",'')
+      current_board = current_board.split(",")
+      i = 0
+      while(i<len(current_board)):
+        if current_board[i] == "None":
+          current_board[i] = None
+        i+=1
+      next_move = cbr.adapt(current_board)
+
+      print("Movimento recomendado: "+ next_move)
+
+      find_x = next_move.find("x")
+      temp = current_board
+      if find_x != -1:
+        temp.append(1)
+      else:
+        temp.append(0)
+
+      temp.append(next_move)
+      temp.append(0.75)
+      boards_list.append(temp)
+
+      result = winnerVerification(current_board, next_move)
+
+      if result == 'white':
+        print("Você venceu")
+        # Fazer o lance do avaliation aqui
+        flag = False
+      elif result == 'black':
+        print("Você perdeu")
+        flag = False
+      elif result == "match tied":
+        print("Empate")
+        flag = False
+      else:
+        pass
+
+    # n = cbr.adapt(current_board)
+    # n = cbr.adapt(['no',None,'wp',None,'wp',None,'no',None,None,'wp',None,'wp',None,'no',None,'wp','no',None,'wp',None,'no',None,'wp',None,None,'bp',None,'no',None,'wp',None,'wp','bp',None,'no',None,'bp',None,'no',None,None,'no',None,'bp',None,'bp',None,'bp','bp',None,'no',None,'no',None,'no',None,None,'no',None,'bp',None,'no',None,'bp',0,0.75])
+    # print(n)
+>>>>>>> 4f15ec470a1db7f0712e305aea0d3277ac89142b
     
     
