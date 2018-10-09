@@ -37,7 +37,6 @@ if __name__ == "__main__":
         temp.append(0)
 
       temp.append(next_move)
-      temp.append(0.75)
       boards_list.append(temp)
 
       result = winnerVerification(current_board, next_move)
