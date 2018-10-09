@@ -339,8 +339,11 @@ class CBR:
       highest, index = self.closestSim()
       self.casesUsedList.append(index)
       outB = self.out.loc[index][0]
+      print(outB)
       startPos = [ord(outB[0]) - 97, int(outB[1]) - 1]
       endPos = [ord(outB[3]) - 97, int(outB[4]) - 1]
+      print(startPos)
+      print(endPos)
       typeOfPiece = self.caseBase.loc[index][outB[0]+outB[1]]
       hDir, vDir = verifyDir(outB)
       nextSpace = verifyMovement(startPos, endPos, hDir, vDir, board, typeOfPiece)
