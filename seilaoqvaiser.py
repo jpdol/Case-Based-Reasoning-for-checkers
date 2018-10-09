@@ -365,6 +365,7 @@ class CBR:
         return nextSpace
       else:
         return lookForPiece(board, startPos, hDir, vDir, typeOfPiece)
+<<<<<<< HEAD
         
         
         
@@ -383,3 +384,9 @@ if __name__ == "__main__":
     cbr.avaliation([['no',None,'wp',None,'wp',None,'no',None,None,'wp',None,'wp',None,'no',None,'wp','no',None,'wp',None,'no',None,'wp',None,None,'bp',None,'no',None,'wp',None,'wp','bp',None,'no',None,'bp',None,'no',None,None,'no',None,'bp',None,'bp',None,'bp','bp',None,'no',None,'no',None,'no',None,None,'no',None,'bp',None,'no',None,'bp',0,0.75]], 'win')
     
     
+=======
+
+    # n = cbr.adapt(current_board)
+    # n = cbr.adapt(['no',None,'wp',None,'wp',None,'no',None,None,'wp',None,'wp',None,'no',None,'wp','no',None,'wp',None,'no',None,'wp',None,None,'bp',None,'no',None,'wp',None,'wp','bp',None,'no',None,'bp',None,'no',None,None,'no',None,'bp',None,'bp',None,'bp','bp',None,'no',None,'no',None,'no',None,None,'no',None,'bp',None,'no',None,'bp',0,0.75])
+    # print(n)    
+>>>>>>> f69ee26a49c5f0f30048bf6569213fc1ccfcb771
