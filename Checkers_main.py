@@ -42,8 +42,11 @@ if __name__ == "__main__":
           current_board[i] = None
         i+=1
       next_move = cbr.receiveAndAdapt(current_board)
-
-      print("Movimento recomendado: ", next_move)
+      result = ''
+      for char in next_move:
+        result = result + chr(char[1]+97) + str(char[0] + 1) + r'-'
+      result = result[:len(result)-1]
+      print("Movimento recomendado: ", result)
 
       temp = current_board
       if 'x' in next_move:
