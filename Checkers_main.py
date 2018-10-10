@@ -1,6 +1,6 @@
 from Checkers_CBR import *
 
-def gameFinish(result,boards_list):
+def gameFinish(cbr, result,boards_list):
   if result == 'white':
     print("Winner: white")
     cbr.avaliation(boards_list,'win')
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
       result = winnerVerification(current_board, 'w')
 
-      continue_game = gameFinish(result, boards_list)
+      continue_game = gameFinish(cbr, result, boards_list)
 
-    continue_game = gameFinish(result, boards_list)
+    continue_game = gameFinish(cbr, result, boards_list)
 
