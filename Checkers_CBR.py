@@ -349,7 +349,7 @@ class CBR:
         for index, row in self.caseBase.iterrows():
             weightSet = 0
             simPort = 0
-            for i in range(len(row)- 1):
+            for i in range(len(row)- 2):
                 (simLocal,weight) = self.simLocal(case, row, i)
                 if(simLocal != None or weight != None):
                     weightSet = weightSet+weight
