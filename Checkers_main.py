@@ -6,7 +6,7 @@ def gameFinish(result,boards_list):
     cbr.avaliation(boards_list,'win')
     continue_game = False
   elif result == 'black':
-    print("Wnner: black")
+    print("Winner: black")
     cbr.avaliation(boards_list,'lose')
     continue_game = False
   elif result == "match tied":
@@ -21,7 +21,6 @@ def gameFinish(result,boards_list):
 if __name__ == "__main__":
     dataset = pd.read_csv(r"CaseBase/caseBase.csv")
     out = pd.DataFrame(dataset.loc[:,'next_move'])
-    dataset = dataset.drop("next_move", axis = 1)
     cbr = CBR(dataset, out)  
     
     continue_game = True
@@ -42,12 +41,14 @@ if __name__ == "__main__":
           current_board[i] = None
         i+=1
       next_move = cbr.receiveAndAdapt(current_board)
-      result = ''
-      for char in next_move:
-        result = result + chr(char[1]+97) + str(char[0] + 1) + r'-'
-      result = result[:len(result)-1]
-      print("Movimento recomendado: ", result)
-
+      if type(next_move) == list:
+        result = ''
+        for char in next_move:
+          result = result + chr(char[1]+97) + str(char[0] + 1) + r'-'
+        result = result[:len(result)-1]
+        print("Movimento recomendado: ", result)
+      else:
+        print("Movimento recomendado: ", next_move)
       temp = current_board
       if 'x' in next_move:
         temp.append(1)

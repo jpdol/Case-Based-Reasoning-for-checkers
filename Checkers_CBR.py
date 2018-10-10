@@ -354,6 +354,8 @@ class CBR:
                 if(simLocal != None or weight != None):
                     weightSet = weightSet+weight
                     simPort = simPort + (simLocal*weight)
+            simPort = simPort + row[len(row)-1]*8
+            weightSet = weightSet + 8
             self.globalSimList.append(simPort/weightSet)
     
     def closestSim(self):
@@ -383,7 +385,6 @@ class CBR:
           value = self.caseBase.loc[index]['jogada_otm'] * att
           self.caseBase.loc[index]['jogada_otm'] = value
       for case in newCasesList:
-        print(case)
         self.caseBase.loc[len(self.caseBase)] = case
       
     
@@ -406,7 +407,7 @@ class CBR:
             longestMove = out
             index = i
       if checkForCaptureD is not None:
-        longestMove = checkForCaptureP[0]
+        longestMove = checkForCaptureD[0]
         for i, out in enumerate(checkForCaptureD):
           if len(out) > len(longestMove):
             longestMove = out
@@ -415,7 +416,7 @@ class CBR:
       if longestMove is not None:
         resultAdapt = ''
         char = 0
-        while char <= len(longestMove)-1:
+        while char <3:
           resultAdapt = resultAdapt + chr(longestMove[char+1]+97) + str(longestMove[char] + 1) + 'x'
           char = char+2
         return resultAdapt[:len(resultAdapt)-1]
