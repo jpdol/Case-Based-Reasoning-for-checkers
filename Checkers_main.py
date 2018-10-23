@@ -63,4 +63,3 @@ if __name__ == "__main__":
       continue_game = gameFinish(cbr, result, boards_list)
 
     continue_game = gameFinish(cbr, result, boards_list)
-
